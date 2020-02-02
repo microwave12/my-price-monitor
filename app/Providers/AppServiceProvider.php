@@ -23,7 +23,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind("App\\Interfaces\\PageRepositoryInterface", "App\\Services\\PageService");
         $this->app->bind("App\\Interfaces\\PageRepositoryInterface", "App\\Repositories\\PageRepository");
     }
 }

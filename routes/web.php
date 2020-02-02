@@ -12,3 +12,5 @@
 */
 
 Route::resource('/page', 'Dashboard\PageCrawlerController');
+Route::get('/page-lists', 'Dashboard\PageCrawlerController@lists');
+Route::get('/lists', 'Dashboard\PageCrawlerController@pageLists');

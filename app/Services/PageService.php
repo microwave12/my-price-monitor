@@ -17,4 +17,14 @@ class PageService
     {
         return $this->pageRepoInterface->create($request);
     }
+
+    public function findById($id)
+    {
+        return $this->pageRepoInterface->findById($id);
+    }
+
+    public function findAll()
+    {
+        return $this->pageRepoInterface->findAll();
+    }
 }

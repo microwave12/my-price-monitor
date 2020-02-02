@@ -312,13 +312,10 @@
                             </div>
                         </li>
                         <li>
-                            <a href="{{ URL::to('/pagecrawler') }}"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+                            <a href="{{ URL::to('/page') }}"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                         </li>
                         <li>
-                            <a href="{{ URL::to('/input') }}"><i class="fa fa-edit fa-fw"></i> Input Member</a>
-                        </li>
-                        <li>
-                            <a href="{{ URL::to('/list') }}"><i class="fa fa-table fa-fw"></i> Member List</a>
+                            <a href="{{ URL::to('/page-lists') }}"><i class="fa fa-table fa-fw"></i> Page Lists</a>
                         </li>
                     </ul>
                 </div>

@@ -23,8 +23,25 @@ class PageCrawlerController extends Controller
 
     public function store(Request $request)
     {
-        $this->pageService->create($request->all());
+        $id = $this->pageService->create($request->all());
 
-        return Redirect::to('/page');
+        return Redirect::to("/page/".$id);
+    }
+
+    public function show($id)
+    {
+        $page = $this->pageService->findById($id);
+
+        return view('detail', ['page' => $page]);
+    }
+
+    public function lists()
+    {
+        return view('list');
+    }
+
+    public function pageLists()
+    {
+        return $this->pageService->findAll();
     }
 }
