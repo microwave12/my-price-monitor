@@ -44,4 +44,9 @@ class PageCrawlerController extends Controller
     {
         return $this->pageService->findAll();
     }
+
+    public function updateJobs()
+    {
+        $this->pageService->updateDetails();
+    }
 }

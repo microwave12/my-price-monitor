@@ -27,4 +27,9 @@ class PageService
     {
         return $this->pageRepoInterface->findAll();
     }
+
+    public function updateDetails()
+    {
+        return $this->pageRepoInterface->updateDetails();
+    }
 }

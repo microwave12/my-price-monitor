@@ -6,6 +6,7 @@ use App\Entities\Page;
 use App\Entities\PageDetail;
 use App\Interfaces\PageRepositoryInterface;
 use Goutte;
+use Illuminate\Support\Facades\DB;
 
 class PageRepository implements PageRepositoryInterface
 {
@@ -22,6 +23,9 @@ class PageRepository implements PageRepositoryInterface
     public function create($request)
     {
         $content = $this->contentCrawler($request['link']);
+        if (empty($content['type']) || $content['type'] != "og:product") {
+            return;
+        }
         $request['title'] = $content['title'];
         
         $page = $this->page->create($request);
@@ -50,8 +54,10 @@ class PageRepository implements PageRepositoryInterface
 
     public function findAll()
     {
-        $page['data'] = $this->page->join('page_details', 'page.id', '=', 'page_details.page_id')
-                            ->orderBy('page_details.created_at', 'DESC')
+        $page['data'] = $this->page->join('page_details', function ($e) {
+                                $e->on('page.id', '=', 'page_details.page_id')
+                                  ->on('page_details.id', '=', DB::raw("(SELECT MAX(id) FROM page_details WHERE page_details.page_id = page.id)"));
+                            })
                             ->select(
                                 'page.id',
                                 'page.title',
@@ -63,6 +69,19 @@ class PageRepository implements PageRepositoryInterface
                             ->get();
 
         return $page;
+    }
+
+    public function updateDetails()
+    {
+        $page = $this->page->all();
+
+        foreach ($page as $list) {
+            if (date("i", strtotime($list['created_at'])) == date("i")) {
+                $content = $this->contentCrawler($list['link']);
+
+                $this->createDetail($content, $list['id']);
+            }
+        }
     }
 
     private function createDetail($content, $id)

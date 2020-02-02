@@ -22,4 +22,9 @@ interface PageRepositoryInterface
      * @return array
      */
     public function findAll();
+
+    /**
+     * @return null
+     */
+    public function updateDetails();
 }
