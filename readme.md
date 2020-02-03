@@ -20,7 +20,7 @@ Export the `crawler.sql` database file to your `MySQL`/`MariaDB` database server
 
 Ensure that your PHP is support `cURL` to `HTTPS/SSL` protocol.
 
-## How to Run & Unit Testing
+## How to Run, Setup Scheduler & Unit Testing
 __CMD/Terminal :__  
 Run & Unit Testing the application via CMD/Terminal.
 
@@ -28,7 +28,14 @@ Run & Unit Testing the application via CMD/Terminal.
 ```
 php -S 127.0.0.1:8080 -t public
 ```
+Or you can directly run the application via `Nginx`/`PHP Apache` server.  
 Access the dashboard at `http://127.0.0.1:8080/page`. Only fabelio product detail page is allowed to submit.
+
+###### Setup Scheduler :
+Scheduler is used to run your submitted product link in order to update it's image, current price and description every hour from the time the link was submitted. Simply you can run this command `php artisan schedule:run` to run the scheduled task or you can automate jobs by using `sudo crontab -e` in `Linux` server. This will open the server Crontab file, paste the code below into the file, save and then exit.
+```
+* * * * * cd /your/application/folder && php artisan schedule:run
+```
 
 ###### Unit Testing :
 ```
@@ -36,7 +43,7 @@ vendor\bin\phpunit
 ```
 
 ###### Live Demo :
-You can directly access the dashboard deployed into my own VPS at given link below :
+You can directly access the dashboard deployed into my own VPS server at given link below :
 ```
 http://149.28.149.134/page
 ```
