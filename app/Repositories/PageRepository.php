@@ -4,8 +4,8 @@ namespace App\Repositories;
 
 use App\Entities\Page;
 use App\Entities\PageDetail;
+use App\Helpers\Helper;
 use App\Interfaces\PageRepositoryInterface;
-use Goutte;
 use Illuminate\Support\Facades\DB;
 
 class PageRepository implements PageRepositoryInterface
@@ -21,17 +21,14 @@ class PageRepository implements PageRepositoryInterface
     }
 
     public function create($request)
-    {
-        $content = $this->contentCrawler($request['link']);
-        if (empty($content['type']) || $content['type'] != "og:product") {
-            return;
-        }
-        $request['title'] = $content['title'];
-        
-        $page = $this->page->create($request);
-        $this->createDetail($content, $page->id);
+    {        
+        return $this->page->create($request);
+    }
 
-        return $page->id;
+    public function createDetail($content, $id)
+    {
+        $content["page_id"] = $id;
+        $this->pageDetail->create($content);
     }
 
     public function findById($id)
@@ -69,42 +66,5 @@ class PageRepository implements PageRepositoryInterface
                             ->get();
 
         return $page;
-    }
-
-    public function updateDetails()
-    {
-        $page = $this->page->all();
-
-        foreach ($page as $list) {
-            if (date("i", strtotime($list['created_at'])) == date("i")) {
-                $content = $this->contentCrawler($list['link']);
-
-                $this->createDetail($content, $list['id']);
-            }
-        }
-    }
-
-    private function createDetail($content, $id)
-    {
-        $content["page_id"] = $id;
-        $this->pageDetail->create($content);
-    }
-
-    private function contentCrawler($url)
-    {
-        $crawler = Goutte::request('GET', $url);
-        $metas = $crawler->filter('meta[property]')->each(function ($node) {
-            return array(
-                "property" => str_replace(array("og:", "product:price:"), "", $node->attr('property')),
-                "content" => $node->attr('content'),
-            );
-        });
-
-        $content = [];
-        foreach ($metas as $meta) {
-            $content[$meta["property"]] = $meta["content"];
-        }
-
-        return $content;
     }
 }

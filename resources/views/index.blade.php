@@ -15,7 +15,7 @@
                             Please insert product link
                         </div>
                         <div class="panel-body">
-                            <div class="row">
+                            <div class="row">                                
                                 <div class="col-lg-6">
                                     <form method="POST" action="{{ URL::to('/page') }}">
                                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
@@ -23,6 +23,9 @@
                                         <div class="form-group">
                                             <label>Product Page Link</label>
                                             <input class="form-control" type="text" name="link">
+                                            @if ($msg = Session::get('warning'))
+                                                <span style="color: red; font-size: 12px;">Warning! {{ $msg }}</span>
+                                            @endif
                                         </div>
                                         <button type="submit" class="btn btn-default btn-primary">Submit</button>
                                     </form>

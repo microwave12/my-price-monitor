@@ -2,6 +2,9 @@
 
 namespace App\Console;
 
+use App\Entities\Page;
+use App\Entities\PageDetail;
+use App\Helpers\Helper;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -24,8 +27,21 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')
-        //          ->hourly();
+        $schedule->call(function () {
+            $page = Page::all();
+    
+            foreach ($page as $list) {
+                if (date("i", strtotime($list['created_at'])) == date("i")) {
+                    $content = Helper::contentCrawler($list['link']);
+                    if (empty($content)) {
+                        continue;
+                    }
+                    
+                    $content['page_id'] = $list['id'];
+                    PageDetail::create($content);
+                }
+            }
+        })->everyMinute();
     }
 
     /**

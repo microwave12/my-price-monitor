@@ -14,6 +14,11 @@ interface PageRepositoryInterface
     public function create($request);
 
     /**
+     * @param array $request
+     */
+    public function createDetail($content, $id);
+
+    /**
      * @param int $id
      */
     public function findById($id);
@@ -22,9 +27,4 @@ interface PageRepositoryInterface
      * @return array
      */
     public function findAll();
-
-    /**
-     * @return null
-     */
-    public function updateDetails();
 }

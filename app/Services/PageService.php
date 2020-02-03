@@ -18,6 +18,11 @@ class PageService
         return $this->pageRepoInterface->create($request);
     }
 
+    public function createDetail($content, $id)
+    {
+        return $this->pageRepoInterface->createDetail($content, $id);
+    }
+
     public function findById($id)
     {
         return $this->pageRepoInterface->findById($id);
@@ -26,10 +31,5 @@ class PageService
     public function findAll()
     {
         return $this->pageRepoInterface->findAll();
-    }
-
-    public function updateDetails()
-    {
-        return $this->pageRepoInterface->updateDetails();
     }
 }

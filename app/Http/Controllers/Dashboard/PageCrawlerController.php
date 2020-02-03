@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Dashboard;
 
+use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
 use App\Services\PageService;
 use Illuminate\Http\Request;
@@ -23,9 +24,16 @@ class PageCrawlerController extends Controller
 
     public function store(Request $request)
     {
-        $id = $this->pageService->create($request->all());
+        $content = Helper::contentCrawler($request->link);
+        if (empty($content)) {
+            return Redirect::to("/page")->with(['warning' => 'No meta property provided in given URL']);
+        }
 
-        return Redirect::to("/page/".$id);
+        $request->merge(['title' => $content['title']]);
+        $page = $this->pageService->create($request->all());
+        $this->pageService->createDetail($content, $page->id);
+
+        return Redirect::to("/page/".$page->id);
     }
 
     public function show($id)
@@ -43,10 +51,5 @@ class PageCrawlerController extends Controller
     public function pageLists()
     {
         return $this->pageService->findAll();
-    }
-
-    public function updateJobs()
-    {
-        $this->pageService->updateDetails();
     }
 }
